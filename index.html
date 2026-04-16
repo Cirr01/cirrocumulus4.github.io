@@ -89,6 +89,22 @@
     .mini-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
     .footer { color: var(--muted); font-size: 13px; text-align: center; margin: 24px 0 8px; }
     @media (max-width: 1100px) { .grid.two, .kpis, .editor-shell, .editor-grid, .mini-grid { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 1fr; } }
+  
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-stack { display: grid; gap: 18px; }
+    nav a.active {
+      background: var(--brand);
+      color: white;
+      border-color: var(--brand);
+    }
+    .page-head {
+      display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+      margin-bottom: 2px;
+    }
+    .page-head h2 { margin:0 0 6px; }
+    .page-head p { margin:0; color: var(--muted); }
+
   </style>
 </head>
 <body>
@@ -104,203 +120,210 @@
       <p>School chair planning prototype based on room capacity, grade-level rules, and shifting schedules with school-specific parameters.</p>
       <div class="hero-actions">
         <a class="button" href="#data-entry">Open TPS Data Entry</a>
-        <a class="button secondary" href="#dashboard">View Dashboard</a>
       </div>
     </header>
 
-    <nav>
-      <a href="#overview">Overview</a>
-      <a href="#dashboard">Dashboard</a>
-      <a href="#data-entry">TPS Data Entry</a>
-      <a href="#reports">MIS Reports</a>
-      <a href="#forecast">DSS Forecast</a>
-      <a href="#parameters">Parameters</a>
+    <nav id="mainNav">
+      <a href="#dashboard" data-page="dashboard">Dashboard</a>
+      <a href="#data-entry" data-page="data-entry">Data Entry & Parameters</a>
+      <a href="#reports" data-page="reports">MIS Reports</a>
+      <a href="#forecast" data-page="forecast">DSS Forecast</a>
     </nav>
 
-    <section id="overview" class="grid two">
-      <div class="panel">
-        <div class="section-title">
-          <div>
-            <h2 style="margin:0 0 6px;">Planning basis</h2>
-            <div class="muted">The site now prioritizes room capacity and shifting load instead of total enrollment alone.</div>
-          </div>
-          <span class="pill">Chair-focused</span>
-        </div>
-        <div class="grid three">
-          <div class="list-item"><h3>1. Grade-level rules</h3><p class="muted">Set room standards separately for Kinder, G1–3, G4–6, JHS, and SHS.</p></div>
-          <div class="list-item"><h3>2. Cleaner TPS</h3><p class="muted">Select one school, edit grouped inputs, and review the compact school summary below.</p></div>
-          <div class="list-item"><h3>3. Priority view</h3><p class="muted">The dashboard highlights schools that should be prioritized for chair allocation.</p></div>
-        </div>
-      </div>
-      <div class="panel">
-        <h2 style="margin:0 0 6px;">Current assumptions</h2>
-        <div class="list-card">
-          <div class="list-item">A standard <strong>7 m × 9 m</strong> classroom is preset to <strong>45 chairs</strong>.</div>
-          <div class="list-item">Primary and secondary simultaneous demand is based on the larger of AM or PM load.</div>
-          <div class="list-item">School-specific parameter overrides are available when one school has unique room conditions.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="dashboard" class="panel" style="margin-top:18px;">
-      <div class="section-title">
-        <div>
-          <h2 style="margin:0 0 6px;">Dashboard</h2>
-          <div class="muted">Quick planning view for the Legazpi City scope.</div>
-        </div>
-        <span class="pill" id="saveStatus">Ready</span>
-      </div>
-      <div class="kpis" id="kpiGrid"></div>
-      <div class="grid two" style="margin-top:18px;">
-        <div class="forecast-box">
-          <h3 style="margin:0 0 6px;">Priority schools for chair allocation</h3>
-          <div class="muted">Sorted by remaining chair gap after planned allocation.</div>
-          <div class="bar-wrap" id="gapBars"></div>
-        </div>
-        <div class="forecast-box">
-          <h3 style="margin:0 0 6px;">Quick interpretation</h3>
-          <div id="insightsList" class="list-card"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="data-entry" class="panel" style="margin-top:18px;">
-      <div class="section-title">
-        <div>
-          <h2 style="margin:0 0 6px;">TPS Data Entry</h2>
-          <div class="muted">Select a school from the list, then edit grouped fields on the right.</div>
-        </div>
-        <span class="pill" id="rowCounter">0 schools</span>
-      </div>
-      <div class="toolbar" style="margin-bottom:12px;">
-        <input id="searchInput" type="text" placeholder="Search school name...">
-        <button id="demoBtn" class="soft" type="button">Load Demo Inputs</button>
-        <button id="addBtn" class="secondary" type="button">Add School</button>
-        <button id="exportBtn" class="secondary" type="button">Export CSV</button>
-        <button id="resetBtn" class="secondary" type="button">Reset Browser Data</button>
-      </div>
-      <div id="emptyNotice" class="status warn" style="display:none; margin-bottom:12px;">No chair planning inputs yet.</div>
-      <div class="editor-shell">
-        <div class="school-list">
-          <div class="school-list-header">Schools in scope</div>
-          <div class="school-list-items" id="schoolList"></div>
-        </div>
-        <div>
-          <div class="editor-card">
-            <div class="section-title" style="margin-bottom:10px;">
+    <div class="page-stack">
+      <main id="page-dashboard" class="page">
+        <section id="overview" class="grid two">
+          <div class="panel">
+            <div class="section-title">
               <div>
-                <h3 id="editorTitle" style="margin:0 0 4px;">School editor</h3>
-                <div class="muted" id="editorSubtitle">Select a school to edit planning inputs.</div>
+                <h2 style="margin:0 0 6px;">Planning basis</h2>
+                <div class="muted">Room capacity, grade-level rules, and shifting schedules drive the chair requirement.</div>
               </div>
-              <button id="deleteSelectedBtn" class="secondary" type="button">Delete School</button>
+              <span class="pill">Chair-focused</span>
             </div>
-            <div class="editor-grid" id="editorForm"></div>
-          </div>
-          <div class="editor-card">
-            <h3 style="margin:0 0 10px;">Selected school summary</h3>
-            <div class="table-wrap">
-              <table style="min-width:760px;">
-                <thead>
-                  <tr>
-                    <th>School</th>
-                    <th>Primary Capacity</th>
-                    <th>Secondary Capacity</th>
-                    <th>Primary Gap</th>
-                    <th>Secondary Gap</th>
-                    <th>Priority</th>
-                  </tr>
-                </thead>
-                <tbody id="selectedSummaryBody"></tbody>
-              </table>
+            <div class="grid three">
+              <div class="list-item"><h3>1. Grade-level rules</h3><p class="muted">Set room standards separately for Kinder, G1–3, G4–6, JHS, and SHS.</p></div>
+              <div class="list-item"><h3>2. Cleaner TPS</h3><p class="muted">Use one school editor at a time, then review the school summary below it.</p></div>
+              <div class="list-item"><h3>3. Priority view</h3><p class="muted">Use the dashboard to identify schools that should be prioritized for chair allocation.</p></div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="reports" class="panel" style="margin-top:18px;">
-      <div class="section-title">
-        <div>
-          <h2 style="margin:0 0 6px;">MIS Reports</h2>
-          <div class="muted">Computed chair capacities, simultaneous demand, and remaining gaps.</div>
-        </div>
-        <span class="pill">Auto-updating</span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>School</th>
-              <th>Primary Capacity</th>
-              <th>Secondary Capacity</th>
-              <th>Primary Demand</th>
-              <th>Secondary Demand</th>
-              <th>Required Primary Chairs</th>
-              <th>Required Secondary Chairs</th>
-              <th>Remaining Primary Gap</th>
-              <th>Remaining Secondary Gap</th>
-              <th>Total Remaining Gap</th>
-              <th>Priority</th>
-            </tr>
-          </thead>
-          <tbody id="reportBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="forecast" class="grid two" style="margin-top:18px;">
-      <div class="panel">
-        <div class="section-title">
-          <div>
-            <h2 style="margin:0 0 6px;">DSS Forecast</h2>
-            <div class="muted">Test how simultaneous demand changes when future load increases.</div>
+          <div class="panel">
+            <h2 style="margin:0 0 6px;">Current assumptions</h2>
+            <div class="list-card">
+              <div class="list-item">A standard <strong>7 m × 9 m</strong> classroom is preset to <strong>45 chairs</strong>.</div>
+              <div class="list-item">Primary and secondary simultaneous demand is based on the larger of AM or PM load.</div>
+              <div class="list-item">School-specific parameter overrides are available when one school has unique room conditions.</div>
+            </div>
           </div>
-          <span class="pill">What-if analysis</span>
-        </div>
-        <div class="forecast-box">
-          <label for="growthRate"><strong>Future load increase</strong></label>
-          <div class="slider-row">
-            <input id="growthRate" type="range" min="0" max="25" step="1" value="10">
-            <input id="growthRateNumber" type="number" min="0" max="25" step="1" value="10">
-          </div>
-          <div class="muted" style="margin-top:8px;">Example: 10 means the simultaneous demand is projected to increase by 10%.</div>
-        </div>
-        <div class="mini-grid" style="margin-top:12px;" id="forecastCards"></div>
-      </div>
-      <div class="panel">
-        <h2 style="margin:0 0 6px;">Forecast interpretation</h2>
-        <div id="forecastInsights" class="list-card"></div>
-      </div>
-    </section>
+        </section>
 
-    <section id="parameters" class="panel" style="margin-top:18px;">
-      <div class="section-title">
-        <div>
-          <h2 style="margin:0 0 6px;">Parameters</h2>
-          <div class="muted" id="paramScopeLabel">Edit default settings for all schools or set custom rules for one school only.</div>
-        </div>
-        <span class="pill">Editable rules</span>
-      </div>
-      <div class="parameter-toolbar">
-        <label for="parameterSchoolSelect"><strong>Apply to:</strong></label>
-        <select id="parameterSchoolSelect"></select>
-        <button id="resetSchoolParamsBtn" class="secondary" type="button">Reset Selected to Default</button>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Grade Level</th>
-              <th>Room Length (m)</th>
-              <th>Room Width (m)</th>
-              <th>Target Chairs per Room</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody id="paramBody"></tbody>
-        </table>
-      </div>
-    </section>
+        <section id="dashboard" class="panel">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0 0 6px;">Dashboard</h2>
+              <div class="muted">Quick planning view for the Legazpi City scope.</div>
+            </div>
+            <span class="pill" id="saveStatus">Ready</span>
+          </div>
+          <div class="kpis" id="kpiGrid"></div>
+          <div class="grid two" style="margin-top:18px;">
+            <div class="forecast-box">
+              <h3 style="margin:0 0 6px;">Priority schools for chair allocation</h3>
+              <div class="muted">Sorted by remaining chair gap after planned allocation.</div>
+              <div class="bar-wrap" id="gapBars"></div>
+            </div>
+            <div class="forecast-box">
+              <h3 style="margin:0 0 6px;">Quick interpretation</h3>
+              <div id="insightsList" class="list-card"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <main id="page-data-entry" class="page">
+        <section id="data-entry" class="panel">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0 0 6px;">TPS Data Entry</h2>
+              <div class="muted">Select a school from the list, then edit grouped fields on the right.</div>
+            </div>
+            <span class="pill" id="rowCounter">0 schools</span>
+          </div>
+          <div class="toolbar" style="margin-bottom:12px;">
+            <input id="searchInput" type="text" placeholder="Search school name...">
+            <button id="demoBtn" class="soft" type="button">Load Demo Inputs</button>
+            <button id="addBtn" class="secondary" type="button">Add School</button>
+            <button id="exportBtn" class="secondary" type="button">Export CSV</button>
+            <button id="resetBtn" class="secondary" type="button">Reset Browser Data</button>
+          </div>
+          <div id="emptyNotice" class="status warn" style="display:none; margin-bottom:12px;">No chair planning inputs yet.</div>
+          <div class="editor-shell">
+            <div class="school-list">
+              <div class="school-list-header">Schools in scope</div>
+              <div class="school-list-items" id="schoolList"></div>
+            </div>
+            <div>
+              <div class="editor-card">
+                <div class="section-title" style="margin-bottom:10px;">
+                  <div>
+                    <h3 id="editorTitle" style="margin:0 0 4px;">School editor</h3>
+                    <div class="muted" id="editorSubtitle">Select a school to edit planning inputs.</div>
+                  </div>
+                  <button id="deleteSelectedBtn" class="secondary" type="button">Delete School</button>
+                </div>
+                <div class="editor-grid" id="editorForm"></div>
+              </div>
+              <div class="editor-card">
+                <h3 style="margin:0 0 10px;">Selected school summary</h3>
+                <div class="table-wrap">
+                  <table style="min-width:760px;">
+                    <thead>
+                      <tr>
+                        <th>School</th>
+                        <th>Primary Capacity</th>
+                        <th>Secondary Capacity</th>
+                        <th>Primary Gap</th>
+                        <th>Secondary Gap</th>
+                        <th>Priority</th>
+                      </tr>
+                    </thead>
+                    <tbody id="selectedSummaryBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="parameters" class="panel">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0 0 6px;">Parameters</h2>
+              <div class="muted" id="paramScopeLabel">Edit default settings for all schools or set custom rules for one school only.</div>
+            </div>
+            <span class="pill">Editable rules</span>
+          </div>
+          <div class="parameter-toolbar">
+            <label for="parameterSchoolSelect"><strong>Apply to:</strong></label>
+            <select id="parameterSchoolSelect"></select>
+            <button id="resetSchoolParamsBtn" class="secondary" type="button">Reset Selected to Default</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Grade Level</th>
+                  <th>Room Length (m)</th>
+                  <th>Room Width (m)</th>
+                  <th>Target Chairs per Room</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="paramBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <main id="page-reports" class="page">
+        <section id="reports" class="panel">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0 0 6px;">MIS Reports</h2>
+              <div class="muted">Computed chair capacities, simultaneous demand, and remaining gaps.</div>
+            </div>
+            <span class="pill">Auto-updating</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>School</th>
+                  <th>Primary Capacity</th>
+                  <th>Secondary Capacity</th>
+                  <th>Primary Demand</th>
+                  <th>Secondary Demand</th>
+                  <th>Required Primary Chairs</th>
+                  <th>Required Secondary Chairs</th>
+                  <th>Remaining Primary Gap</th>
+                  <th>Remaining Secondary Gap</th>
+                  <th>Total Remaining Gap</th>
+                  <th>Priority</th>
+                </tr>
+              </thead>
+              <tbody id="reportBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+
+      <main id="page-forecast" class="page">
+        <section id="forecast" class="grid two">
+          <div class="panel">
+            <div class="section-title">
+              <div>
+                <h2 style="margin:0 0 6px;">DSS Forecast</h2>
+                <div class="muted">Test how simultaneous demand changes when future load increases.</div>
+              </div>
+              <span class="pill">What-if analysis</span>
+            </div>
+            <div class="forecast-box">
+              <label for="growthRate"><strong>Future load increase</strong></label>
+              <div class="slider-row">
+                <input id="growthRate" type="range" min="0" max="25" step="1" value="10">
+                <input id="growthRateNumber" type="number" min="0" max="25" step="1" value="10">
+              </div>
+              <div class="muted" style="margin-top:8px;">Example: 10 means the simultaneous demand is projected to increase by 10%.</div>
+            </div>
+            <div class="mini-grid" style="margin-top:12px;" id="forecastCards"></div>
+          </div>
+          <div class="panel">
+            <h2 style="margin:0 0 6px;">Forecast interpretation</h2>
+            <div id="forecastInsights" class="list-card"></div>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <div class="footer">Chair planning prototype.</div>
   </div>
@@ -379,7 +402,26 @@
       deleteSelectedBtn: document.getElementById('deleteSelectedBtn')
     };
 
-    function loadState() {
+    
+    function getPageFromHash() {
+      const hash = (window.location.hash || '#dashboard').replace('#', '');
+      if (hash === 'overview' || hash === 'dashboard') return 'dashboard';
+      if (hash === 'data-entry' || hash === 'parameters') return 'data-entry';
+      if (hash === 'reports') return 'reports';
+      if (hash === 'forecast') return 'forecast';
+      return 'dashboard';
+    }
+
+    function showPage(page) {
+      document.querySelectorAll('.page').forEach(el => {
+        el.classList.toggle('active', el.id === `page-${page}`);
+      });
+      document.querySelectorAll('#mainNav a').forEach(link => {
+        link.classList.toggle('active', link.dataset.page === page);
+      });
+    }
+
+function loadState() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         try {
@@ -690,8 +732,13 @@
     document.getElementById('resetBtn').addEventListener('click', resetBrowserData);
     els.deleteSelectedBtn.addEventListener('click', removeSelectedSchool);
 
+    window.addEventListener('hashchange', () => {
+      showPage(resolvePageFromHash());
+    });
+
     loadState();
     renderAll();
+    showPage(resolvePageFromHash());
   </script>
 </body>
 </html>
