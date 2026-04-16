@@ -1,0 +1,1135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legazpi City School Chair Planning System</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --line: #d9e2ec;
+      --ink: #102a43;
+      --muted: #5c6f82;
+      --brand: #0f766e;
+      --brand-2: #0b5f59;
+      --accent: #2563eb;
+      --warn: #b45309;
+      --danger: #b91c1c;
+      --ok: #166534;
+      --soft: #eef6f7;
+      --chip: #e5f4f2;
+      --shadow: 0 10px 25px rgba(16, 42, 67, 0.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 220px);
+      color: var(--ink);
+    }
+    .shell {
+      max-width: 1350px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+    header {
+      background: linear-gradient(135deg, var(--brand) 0%, #115e59 100%);
+      color: white;
+      padding: 28px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+    header h1 {
+      margin: 0 0 10px 0;
+      font-size: 32px;
+      line-height: 1.1;
+    }
+    header p {
+      margin: 0;
+      max-width: 850px;
+      line-height: 1.5;
+      opacity: 0.96;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .tag {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 10px 0;
+      backdrop-filter: blur(8px);
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--ink);
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(16, 42, 67, 0.04);
+    }
+    nav a:hover { border-color: var(--brand); color: var(--brand); }
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+    .grid.two { grid-template-columns: 1.5fr 1fr; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      overflow: hidden;
+    }
+    .panel h2, .panel h3 {
+      margin-top: 0;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    button, .button {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 8px 16px rgba(15, 118, 110, 0.18);
+    }
+    button.secondary, .button.secondary {
+      background: white;
+      color: var(--brand);
+      border: 1px solid var(--brand);
+      box-shadow: none;
+    }
+    button.soft {
+      background: #eef2ff;
+      color: #3730a3;
+      box-shadow: none;
+    }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .kpi {
+      background: linear-gradient(180deg, white 0%, #f9fcff 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .kpi .label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .kpi .value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .kpi .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .list-card {
+      display: grid;
+      gap: 10px;
+    }
+    .list-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fbfdff;
+    }
+    .bar-wrap {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 56px;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .bar-track {
+      background: #e7eef7;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 14px;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #60a5fa);
+      border-radius: 999px;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .toolbar input[type="text"], .toolbar input[type="number"], select {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      min-height: 42px;
+      background: white;
+      color: var(--ink);
+    }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1200px;
+      font-size: 13px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #ecfdf5;
+      color: #065f46;
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--line);
+      z-index: 1;
+    }
+    tbody td {
+      border-bottom: 1px solid #edf2f7;
+      padding: 8px 10px;
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: #fbfdff; }
+    tbody tr:hover { background: #f0f9ff; }
+    td input, td select {
+      width: 100%;
+      min-width: 90px;
+      border: 1px solid #dbe7f1;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 13px;
+      background: white;
+    }
+    .readonly {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .status {
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      font-size: 14px;
+    }
+    .status.warn {
+      background: #fff7ed;
+      color: var(--warn);
+      border-color: #fed7aa;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--chip);
+      color: var(--brand-2);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .forecast-box {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fbfdff;
+    }
+    .slider-row {
+      display: grid;
+      grid-template-columns: 1fr 80px;
+      gap: 10px;
+      align-items: center;
+      margin: 12px 0 6px;
+    }
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      margin: 24px 0 8px;
+    }
+    @media (max-width: 1024px) {
+      .grid.two, .grid.three, .kpis, .mini-grid {
+        grid-template-columns: 1fr;
+      }
+      .bar-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    input, select, textarea, td input, td select {
+  color: #102a43 !important;
+  background: #ffffff !important;
+  -webkit-text-fill-color: #102a43 !important;
+  opacity: 1 !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+.kpi .value,
+.kpi .label,
+.kpi .sub,
+.forecast-box,
+.forecast-box *,
+.panel,
+.panel p,
+.panel li,
+.panel div,
+.readonly,
+.muted,
+.note {
+  color: #102a43 !important;
+}
+
+.readonly,
+.muted,
+.note,
+.kpi .sub,
+.kpi .label {
+  color: #5c6f82 !important;
+}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header id="home">
+      <h1>Legazpi City School Chair Planning System</h1>
+      <p>
+        A working website version of your spreadsheet project focused on chair planning. This version now computes chair demand based on <strong>room capacity</strong>, separates <strong>primary and secondary chair requirements</strong>, and adjusts for <strong>shifting schedules</strong>. It still uses <strong>TPS</strong> for data entry, <strong>MIS</strong> for reports, and <strong>DSS</strong> for forecasting.
+      </p>
+      <div class="tag-row">
+        <div class="tag">Scope: Legazpi City</div>
+        <div class="tag">Source base: uploaded spreadsheet</div>
+        <div class="tag">No install needed</div>
+        <div class="tag">Room-based chair planning</div>
+      </div>
+      <div class="hero-actions">
+  <a class="button" href="#data-entry">Start Chair Planning</a>
+  <a class="button secondary" href="#dashboard">View Dashboard</a>
+  <a class="button secondary" href="https://script.google.com/macros/library/d/1sYVwHXsM-S-_KleyQKwb29f1pB61uhKTU3tIf9xuqRgzRNYRnARnDUGH/2" target="_blank">Open Live Database System</a>
+</div>
+
+    </header>
+
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#data-entry">TPS Data Entry</a>
+      <a href="#reports">MIS Reports</a>
+      <a href="#forecast">DSS Forecast</a>
+      <a href="#parameters">Parameters</a>
+      <a href="#help">Help</a>
+    </nav>
+
+    <section id="overview" class="grid two">
+      <div class="panel">
+        <div class="section-title">
+          <div>
+            <h2 style="margin-bottom:6px;">Project flow</h2>
+            <div class="muted">This mirrors your spreadsheet logic, but now uses room-based chair planning.</div>
+          </div>
+          <span class="pill">Spreadsheet → Website</span>
+        </div>
+        <div class="grid three">
+          <div class="list-item">
+            <h3>1. TPS</h3>
+            <p class="muted">Enter room counts, shifting schedules, and available chairs for primary and secondary levels.</p>
+          </div>
+          <div class="list-item">
+            <h3>2. MIS</h3>
+            <p class="muted">Generate summaries, chair capacities, simultaneous demand, and gap reports per school.</p>
+          </div>
+          <div class="list-item">
+            <h3>3. DSS</h3>
+            <p class="muted">Test growth in simultaneous student load and see how future chair shortages change.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-bottom:6px;">What you still need from the office</h2>
+        <div class="muted" style="margin-bottom:10px;">These are the main fields this website expects for actual testing.</div>
+        <div class="list-card">
+          <div class="list-item"><strong>School details:</strong> School ID, School Name, Level, District or Location</div>
+          <div class="list-item"><strong>Room inventory:</strong> Number of primary rooms, number of secondary rooms</div>
+          <div class="list-item"><strong>Chair inventory:</strong> Existing primary chairs, existing secondary chairs</div>
+          <div class="list-item"><strong>Planning data:</strong> Planned primary chairs, planned secondary chairs, funding year, ranking</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboard" class="panel" style="margin-top:18px;">
+      <div class="section-title">
+        <div>
+          <h2 style="margin-bottom:6px;">Dashboard</h2>
+          <div class="muted">Quick view of current room-based chair requirements for the Legazpi City scope.</div>
+        </div>
+        <span class="pill" id="saveStatus">Ready</span>
+      </div>
+      <div class="kpis" id="kpiGrid"></div>
+      <div class="grid two" style="margin-top:18px;">
+        <div class="forecast-box">
+          <h3 style="margin-bottom:6px;">Top schools by remaining chair gap</h3>
+          <div class="muted">This shows where the biggest chair shortage still remains after planned allocations.</div>
+          <div class="bar-wrap" id="gapBars"></div>
+        </div>
+        <div class="forecast-box">
+          <h3 style="margin-bottom:6px;">Quick interpretation</h3>
+          <div id="insightsList" class="list-card"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="data-entry" class="panel" style="margin-top:18px;">
+      <div class="section-title">
+        <div>
+          <h2 style="margin-bottom:6px;">TPS Data Entry</h2>
+          <div class="muted">Type room counts, shifting loads, and available chairs here. It auto-saves in your browser.</div>
+        </div>
+        <span class="pill" id="rowCounter">0 schools</span>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" type="text" placeholder="Search school name...">
+        <button id="demoBtn" class="soft" type="button">Load Demo Inputs</button>
+        <button id="addBtn" class="secondary" type="button">Add School</button>
+        <button id="exportBtn" class="secondary" type="button">Export CSV</button>
+        <button id="resetBtn" class="secondary" type="button">Reset Browser Data</button>
+      </div>
+
+      <div id="emptyNotice" class="status warn" style="display:none;">
+        No actual chair planning inputs yet. You can type real data now, or click <strong>Load Demo Inputs</strong> to preview how the website behaves.
+      </div>
+
+      <div class="table-wrap" style="margin-top:12px;">
+        <table>
+          <thead>
+            <tr>
+              <th>School ID</th>
+              <th>School Name</th>
+              <th>Primary Rooms</th>
+              <th>Secondary Rooms</th>
+              <th>Primary AM</th>
+              <th>Primary PM</th>
+              <th>Secondary AM</th>
+              <th>Secondary PM</th>
+              <th>Existing Primary Chairs</th>
+              <th>Existing Secondary Chairs</th>
+              <th>Planned Primary Chairs</th>
+              <th>Planned Secondary Chairs</th>
+              <th>Funding Year</th>
+              <th>Ranking</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dataBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="reports" class="panel" style="margin-top:18px;">
+      <div class="section-title">
+        <div>
+          <h2 style="margin-bottom:6px;">MIS Reports</h2>
+          <div class="muted">Auto-computed room capacities, simultaneous demand, and chair gaps per school.</div>
+        </div>
+        <span class="pill">Auto-updating</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>School</th>
+              <th>Primary Capacity</th>
+              <th>Secondary Capacity</th>
+              <th>Primary Simultaneous Demand</th>
+              <th>Secondary Simultaneous Demand</th>
+              <th>Required Primary Chairs</th>
+              <th>Required Secondary Chairs</th>
+              <th>Primary Gap</th>
+              <th>Secondary Gap</th>
+              <th>Remaining Primary Gap</th>
+              <th>Remaining Secondary Gap</th>
+              <th>Total Remaining Gap</th>
+            </tr>
+          </thead>
+          <tbody id="reportBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="forecast" class="grid two" style="margin-top:18px;">
+      <div class="panel">
+        <div class="section-title">
+          <div>
+            <h2 style="margin-bottom:6px;">DSS Forecast</h2>
+            <div class="muted">Test what happens if simultaneous student load grows next year.</div>
+          </div>
+          <span class="pill">What-if analysis</span>
+        </div>
+
+        <div class="forecast-box">
+          <label for="growthRate"><strong>Simultaneous load growth rate</strong></label>
+          <div class="slider-row">
+            <input id="growthRate" type="range" min="0" max="25" step="1" value="10">
+            <input id="growthRateNumber" type="number" min="0" max="25" step="1" value="10">
+          </div>
+          <div class="note">Example: 10 means the morning and afternoon student loads are projected to increase by 10%.</div>
+        </div>
+
+        <div class="mini-grid" style="margin-top:12px;" id="forecastCards"></div>
+      </div>
+
+      <div class="panel">
+        <h2 style="margin-bottom:6px;">Forecast interpretation</h2>
+        <div class="muted" style="margin-bottom:12px;">This helps you explain the decision-support part of your project.</div>
+        <div id="forecastInsights" class="list-card"></div>
+      </div>
+    </section>
+
+    <section id="parameters" class="panel" style="margin-top:18px;">
+      <div class="section-title">
+        <div>
+          <h2 style="margin-bottom:6px;">Planning Parameters</h2>
+          <div class="muted">Edit the standard room dimensions, chair dimensions, and layout efficiency here. The whole site updates.</div>
+        </div>
+        <span class="pill">Editable rules</span>
+      </div>
+
+      <div class="table-wrap">
+        <table style="min-width: 980px;">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Room Length (m)</th>
+              <th>Room Width (m)</th>
+              <th>Chair Length (m)</th>
+              <th>Chair Width (m)</th>
+              <th>Layout Efficiency</th>
+              <th>Chairs / Standard Room</th>
+            </tr>
+          </thead>
+          <tbody id="paramBody"></tbody>
+        </table>
+      </div>
+
+      <div class="mini-grid" style="margin-top:16px;">
+        <div class="forecast-box">
+          <label><strong>Primary label</strong></label>
+          <div class="note">Used for smaller chair specification.</div>
+        </div>
+        <div class="forecast-box">
+          <label><strong>Secondary label</strong></label>
+          <div class="note">Used for larger chair specification.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="help" class="grid two" style="margin-top:18px;">
+      <div class="panel">
+        <h2 style="margin-bottom:6px;">How to use this website</h2>
+        <div class="list-card">
+          <div class="list-item">Open the file in your browser.</div>
+          <div class="list-item">Go to <strong>TPS Data Entry</strong> and type room counts, shifts, and current chair inventory.</div>
+          <div class="list-item">Check <strong>MIS Reports</strong> for room capacity, simultaneous demand, and chair shortages.</div>
+          <div class="list-item">Use <strong>DSS Forecast</strong> to show future chair needs during your presentation.</div>
+          <div class="list-item">Click <strong>Export CSV</strong> if you want a copy of your browser data.</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2 style="margin-bottom:6px;">Important notes</h2>
+        <div class="list-card">
+          <div class="list-item">The site starts with Legazpi City schools from your uploaded workbook.</div>
+          <div class="list-item">Most actual planning fields are blank on purpose, because those are the real values you still need to request.</div>
+          <div class="list-item">The <strong>Load Demo Inputs</strong> button generates sample values for testing only.</div>
+          <div class="list-item">All changes are stored locally in your own browser until you reset them.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Built from your spreadsheet structure for a school chair planning project demo.
+    </div>
+  </div>
+
+  
+  <script>
+    const STORAGE_KEY = "legazpi-chair-planning-site-v2";
+    const rawSeedSchools = [
+      {"region":"Region V","division":"Legazpi City","schoolId":"302259","schoolName":"Homapon High School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":2},
+      {"region":"Region V","division":"Legazpi City","schoolId":"502624","schoolName":"San Francisco IS","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":3},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114493","schoolName":"Rawis ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":4},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114476","schoolName":"Buraguis ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":1},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114491","schoolName":"Matanag ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":5},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114458","schoolName":"Bogna Elementary School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":6},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114472","schoolName":"Estanza ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":7},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114490","schoolName":"Gogon CS","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":8},
+      {"region":"Region V","division":"Legazpi City","schoolId":"306333","schoolName":"Bagumbayan-East Washington National High School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":1},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114460","schoolName":"Homapon ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":2},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114466","schoolName":"Bagumbayan CS","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":3},
+      {"region":"Region V","division":"Legazpi City","schoolId":"100182","schoolName":"Banquerohan Resettlement Elementary School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":4},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114465","schoolName":"Bagacay ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":5},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114487","schoolName":"Bigaa Elementary School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2027,"ranking":6},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114482","schoolName":"Maslog ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2028,"ranking":1},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114474","schoolName":"Taysan ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2029,"ranking":1},
+      {"region":"Region V","division":"Legazpi City","schoolId":"114459","schoolName":"Bogtong ES","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2030,"ranking":1}
+    ];
+
+    const defaultParameters = {
+      categories: [
+        { category: "Primary", roomLength: 7, roomWidth: 9, chairLength: 0.45, chairWidth: 0.45, layoutEfficiency: 0.72 },
+        { category: "Secondary", roomLength: 7, roomWidth: 9, chairLength: 0.50, chairWidth: 0.50, layoutEfficiency: 0.72 }
+      ]
+    };
+
+    function createSeedSchool(row) {
+      return {
+        ...row,
+        primaryRooms: "",
+        secondaryRooms: "",
+        primaryMorningStudents: "",
+        primaryAfternoonStudents: "",
+        secondaryMorningStudents: "",
+        secondaryAfternoonStudents: "",
+        existingPrimaryChairs: "",
+        existingSecondaryChairs: "",
+        plannedPrimaryChairs: 0,
+        plannedSecondaryChairs: 0
+      };
+    }
+
+    const state = {
+      schools: [],
+      parameters: structuredClone(defaultParameters)
+    };
+
+    const els = {
+      dataBody: document.getElementById("dataBody"),
+      reportBody: document.getElementById("reportBody"),
+      paramBody: document.getElementById("paramBody"),
+      kpiGrid: document.getElementById("kpiGrid"),
+      gapBars: document.getElementById("gapBars"),
+      insightsList: document.getElementById("insightsList"),
+      forecastCards: document.getElementById("forecastCards"),
+      forecastInsights: document.getElementById("forecastInsights"),
+      rowCounter: document.getElementById("rowCounter"),
+      searchInput: document.getElementById("searchInput"),
+      saveStatus: document.getElementById("saveStatus"),
+      emptyNotice: document.getElementById("emptyNotice"),
+      growthRate: document.getElementById("growthRate"),
+      growthRateNumber: document.getElementById("growthRateNumber")
+    };
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state.schools = parsed.schools || rawSeedSchools.map(createSeedSchool);
+          state.parameters = parsed.parameters || structuredClone(defaultParameters);
+          return;
+        } catch (error) {
+          console.warn("Could not parse saved state. Loading seed data.", error);
+        }
+      }
+      state.schools = rawSeedSchools.map(createSeedSchool);
+      state.parameters = structuredClone(defaultParameters);
+    }
+
+    function saveState(message = "Saved") {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ schools: state.schools, parameters: state.parameters }));
+      els.saveStatus.textContent = message;
+      window.clearTimeout(saveState._timer);
+      saveState._timer = window.setTimeout(() => els.saveStatus.textContent = "Ready", 1800);
+    }
+
+    function numberOrZero(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function formatNumber(value) {
+      return new Intl.NumberFormat().format(numberOrZero(value));
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function csvEscape(value) {
+      const text = String(value ?? "");
+      if (text.includes(",") || text.includes('"') || text.includes("\n")) {
+        return `"${text.replace(/"/g, '""')}"`;
+      }
+      return text;
+    }
+
+    function getCategoryRule(category) {
+      return state.parameters.categories.find(item => item.category === category) || state.parameters.categories[0];
+    }
+
+    function computeChairsPerRoom(rule) {
+      const roomArea = numberOrZero(rule.roomLength) * numberOrZero(rule.roomWidth);
+      const chairArea = Math.max(0.0001, numberOrZero(rule.chairLength) * numberOrZero(rule.chairWidth));
+      const usableArea = roomArea * numberOrZero(rule.layoutEfficiency);
+      return Math.max(0, Math.floor(usableArea / chairArea));
+    }
+
+    function computeSchool(school) {
+      const primaryRule = getCategoryRule("Primary");
+      const secondaryRule = getCategoryRule("Secondary");
+      const primaryChairsPerRoom = computeChairsPerRoom(primaryRule);
+      const secondaryChairsPerRoom = computeChairsPerRoom(secondaryRule);
+
+      const primaryRooms = numberOrZero(school.primaryRooms);
+      const secondaryRooms = numberOrZero(school.secondaryRooms);
+      const primaryMorningStudents = numberOrZero(school.primaryMorningStudents);
+      const primaryAfternoonStudents = numberOrZero(school.primaryAfternoonStudents);
+      const secondaryMorningStudents = numberOrZero(school.secondaryMorningStudents);
+      const secondaryAfternoonStudents = numberOrZero(school.secondaryAfternoonStudents);
+      const existingPrimaryChairs = numberOrZero(school.existingPrimaryChairs);
+      const existingSecondaryChairs = numberOrZero(school.existingSecondaryChairs);
+      const plannedPrimaryChairs = numberOrZero(school.plannedPrimaryChairs);
+      const plannedSecondaryChairs = numberOrZero(school.plannedSecondaryChairs);
+
+      const primaryCapacity = primaryRooms * primaryChairsPerRoom;
+      const secondaryCapacity = secondaryRooms * secondaryChairsPerRoom;
+      const primarySimultaneousDemand = Math.max(primaryMorningStudents, primaryAfternoonStudents);
+      const secondarySimultaneousDemand = Math.max(secondaryMorningStudents, secondaryAfternoonStudents);
+      const requiredPrimaryChairs = Math.min(primaryCapacity, primarySimultaneousDemand || primaryCapacity);
+      const requiredSecondaryChairs = Math.min(secondaryCapacity, secondarySimultaneousDemand || secondaryCapacity);
+      const primaryGap = Math.max(0, requiredPrimaryChairs - existingPrimaryChairs);
+      const secondaryGap = Math.max(0, requiredSecondaryChairs - existingSecondaryChairs);
+      const remainingPrimaryGap = Math.max(0, primaryGap - plannedPrimaryChairs);
+      const remainingSecondaryGap = Math.max(0, secondaryGap - plannedSecondaryChairs);
+      const totalRemainingGap = remainingPrimaryGap + remainingSecondaryGap;
+      const totalCapacity = primaryCapacity + secondaryCapacity;
+      const totalRequiredChairs = requiredPrimaryChairs + requiredSecondaryChairs;
+
+      return {
+        ...school,
+        primaryChairsPerRoom,
+        secondaryChairsPerRoom,
+        primaryCapacity,
+        secondaryCapacity,
+        primarySimultaneousDemand,
+        secondarySimultaneousDemand,
+        requiredPrimaryChairs,
+        requiredSecondaryChairs,
+        primaryGap,
+        secondaryGap,
+        remainingPrimaryGap,
+        remainingSecondaryGap,
+        totalRemainingGap,
+        totalCapacity,
+        totalRequiredChairs
+      };
+    }
+
+    function getComputedSchools() {
+      return state.schools.map(computeSchool);
+    }
+
+    function renderKPIs(computed) {
+      const totals = computed.reduce((acc, row) => {
+        acc.schools += 1;
+        acc.totalCapacity += row.totalCapacity;
+        acc.totalRequiredChairs += row.totalRequiredChairs;
+        acc.remainingPrimaryGap += row.remainingPrimaryGap;
+        acc.remainingSecondaryGap += row.remainingSecondaryGap;
+        return acc;
+      }, { schools: 0, totalCapacity: 0, totalRequiredChairs: 0, remainingPrimaryGap: 0, remainingSecondaryGap: 0 });
+
+      const cards = [
+        { label: "Schools in scope", value: totals.schools, sub: "Legazpi City seed list" },
+        { label: "Total chair capacity", value: totals.totalCapacity, sub: "Based on room dimensions and chair size" },
+        { label: "Total required chairs", value: totals.totalRequiredChairs, sub: "Adjusted for shifting schedules" },
+        { label: "Remaining chair gap", value: totals.remainingPrimaryGap + totals.remainingSecondaryGap, sub: "After planned allocation" }
+      ];
+
+      els.kpiGrid.innerHTML = cards.map(card => `
+        <div class="kpi">
+          <div class="label">${card.label}</div>
+          <div class="value">${formatNumber(card.value)}</div>
+          <div class="sub">${card.sub}</div>
+        </div>
+      `).join("");
+
+      const topGaps = [...computed].sort((a, b) => b.totalRemainingGap - a.totalRemainingGap).slice(0, 5);
+      const maxGap = Math.max(1, ...topGaps.map(item => numberOrZero(item.totalRemainingGap)));
+      els.gapBars.innerHTML = topGaps.map(item => `
+        <div class="bar-row">
+          <div>${escapeHtml(item.schoolName)}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(numberOrZero(item.totalRemainingGap) / maxGap) * 100}%"></div></div>
+          <div><strong>${formatNumber(item.totalRemainingGap)}</strong></div>
+        </div>
+      `).join("") || '<div class="muted">No chair gap data yet.</div>';
+
+      const schoolsWithInputs = computed.filter(item => item.primaryRooms || item.secondaryRooms || item.primarySimultaneousDemand || item.secondarySimultaneousDemand).length;
+      const highestGap = topGaps[0];
+      const insightItems = [
+        `${schoolsWithInputs} school(s) currently have actual chair planning inputs entered.`,
+        `Current total room-based chair capacity is ${formatNumber(totals.totalCapacity)}.`,
+        highestGap ? `Highest remaining total chair gap: ${highestGap.schoolName} with ${formatNumber(highestGap.totalRemainingGap)} chair(s).` : `No chair gap data yet.`,
+        totals.remainingPrimaryGap + totals.remainingSecondaryGap > 0 ? `There is still an unresolved chair shortage based on the current entries.` : `No remaining chair shortage is showing right now.`
+      ];
+      els.insightsList.innerHTML = insightItems.map(text => `<div class="list-item">${text}</div>`).join("");
+    }
+
+    function renderDataTable() {
+      const query = els.searchInput.value.trim().toLowerCase();
+      const rows = state.schools.filter(row => !query || row.schoolName.toLowerCase().includes(query));
+      els.rowCounter.textContent = `${rows.length} school(s) shown`;
+
+      els.dataBody.innerHTML = rows.map((school) => {
+        const originalIndex = state.schools.indexOf(school);
+        return `
+          <tr>
+            <td><div><strong>${escapeHtml(school.schoolId || "")}</strong></div><div class="readonly">${escapeHtml(school.division || "")}</div></td>
+            <td>
+              <input data-field="schoolName" data-index="${originalIndex}" value="${escapeHtml(school.schoolName)}" />
+              <div class="readonly">${escapeHtml(school.municipality || "")}</div>
+            </td>
+            <td><input type="number" min="0" data-field="primaryRooms" data-index="${originalIndex}" value="${school.primaryRooms}"></td>
+            <td><input type="number" min="0" data-field="secondaryRooms" data-index="${originalIndex}" value="${school.secondaryRooms}"></td>
+            <td><input type="number" min="0" data-field="primaryMorningStudents" data-index="${originalIndex}" value="${school.primaryMorningStudents}"></td>
+            <td><input type="number" min="0" data-field="primaryAfternoonStudents" data-index="${originalIndex}" value="${school.primaryAfternoonStudents}"></td>
+            <td><input type="number" min="0" data-field="secondaryMorningStudents" data-index="${originalIndex}" value="${school.secondaryMorningStudents}"></td>
+            <td><input type="number" min="0" data-field="secondaryAfternoonStudents" data-index="${originalIndex}" value="${school.secondaryAfternoonStudents}"></td>
+            <td><input type="number" min="0" data-field="existingPrimaryChairs" data-index="${originalIndex}" value="${school.existingPrimaryChairs}"></td>
+            <td><input type="number" min="0" data-field="existingSecondaryChairs" data-index="${originalIndex}" value="${school.existingSecondaryChairs}"></td>
+            <td><input type="number" min="0" data-field="plannedPrimaryChairs" data-index="${originalIndex}" value="${school.plannedPrimaryChairs}"></td>
+            <td><input type="number" min="0" data-field="plannedSecondaryChairs" data-index="${originalIndex}" value="${school.plannedSecondaryChairs}"></td>
+            <td><input type="number" min="0" data-field="proposedFundingYear" data-index="${originalIndex}" value="${school.proposedFundingYear}"></td>
+            <td><input type="number" min="0" data-field="ranking" data-index="${originalIndex}" value="${school.ranking}"></td>
+            <td><button class="secondary" type="button" onclick="removeSchool(${originalIndex})">Delete</button></td>
+          </tr>
+        `;
+      }).join("");
+
+      const hasActualInputs = state.schools.some(item =>
+        numberOrZero(item.primaryRooms) > 0 ||
+        numberOrZero(item.secondaryRooms) > 0 ||
+        numberOrZero(item.primaryMorningStudents) > 0 ||
+        numberOrZero(item.primaryAfternoonStudents) > 0 ||
+        numberOrZero(item.secondaryMorningStudents) > 0 ||
+        numberOrZero(item.secondaryAfternoonStudents) > 0 ||
+        numberOrZero(item.existingPrimaryChairs) > 0 ||
+        numberOrZero(item.existingSecondaryChairs) > 0
+      );
+      els.emptyNotice.style.display = hasActualInputs ? "none" : "block";
+    }
+
+    function renderReports(computed) {
+      els.reportBody.innerHTML = computed.map(row => `
+        <tr>
+          <td><strong>${escapeHtml(row.schoolName)}</strong><div class="readonly">${escapeHtml(row.municipality || "")}</div></td>
+          <td>${formatNumber(row.primaryCapacity)}</td>
+          <td>${formatNumber(row.secondaryCapacity)}</td>
+          <td>${formatNumber(row.primarySimultaneousDemand)}</td>
+          <td>${formatNumber(row.secondarySimultaneousDemand)}</td>
+          <td>${formatNumber(row.requiredPrimaryChairs)}</td>
+          <td>${formatNumber(row.requiredSecondaryChairs)}</td>
+          <td>${formatNumber(row.primaryGap)}</td>
+          <td>${formatNumber(row.secondaryGap)}</td>
+          <td>${formatNumber(row.remainingPrimaryGap)}</td>
+          <td>${formatNumber(row.remainingSecondaryGap)}</td>
+          <td>${formatNumber(row.totalRemainingGap)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderParameters() {
+      els.paramBody.innerHTML = state.parameters.categories.map((row, index) => {
+        const chairsPerRoom = computeChairsPerRoom(row);
+        return `
+          <tr>
+            <td><strong>${row.category}</strong></td>
+            <td><input type="number" min="1" step="0.1" data-param-index="${index}" data-param-field="roomLength" value="${row.roomLength}"></td>
+            <td><input type="number" min="1" step="0.1" data-param-index="${index}" data-param-field="roomWidth" value="${row.roomWidth}"></td>
+            <td><input type="number" min="0.1" step="0.01" data-param-index="${index}" data-param-field="chairLength" value="${row.chairLength}"></td>
+            <td><input type="number" min="0.1" step="0.01" data-param-index="${index}" data-param-field="chairWidth" value="${row.chairWidth}"></td>
+            <td><input type="number" min="0.1" max="1" step="0.01" data-param-index="${index}" data-param-field="layoutEfficiency" value="${row.layoutEfficiency}"></td>
+            <td><strong>${formatNumber(chairsPerRoom)}</strong></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderForecast(computed) {
+      const rate = numberOrZero(els.growthRate.value) / 100;
+      const future = computed.map(row => {
+        const primaryMorningStudents = Math.ceil(numberOrZero(row.primaryMorningStudents) * (1 + rate));
+        const primaryAfternoonStudents = Math.ceil(numberOrZero(row.primaryAfternoonStudents) * (1 + rate));
+        const secondaryMorningStudents = Math.ceil(numberOrZero(row.secondaryMorningStudents) * (1 + rate));
+        const secondaryAfternoonStudents = Math.ceil(numberOrZero(row.secondaryAfternoonStudents) * (1 + rate));
+        const projectedRow = computeSchool({
+          ...row,
+          primaryMorningStudents,
+          primaryAfternoonStudents,
+          secondaryMorningStudents,
+          secondaryAfternoonStudents
+        });
+        return { ...projectedRow };
+      });
+
+      const totals = future.reduce((acc, row) => {
+        acc.projectedPrimaryDemand += row.primarySimultaneousDemand;
+        acc.projectedSecondaryDemand += row.secondarySimultaneousDemand;
+        acc.projectedRequiredChairs += row.totalRequiredChairs;
+        acc.remainingGap += row.totalRemainingGap;
+        return acc;
+      }, { projectedPrimaryDemand: 0, projectedSecondaryDemand: 0, projectedRequiredChairs: 0, remainingGap: 0 });
+
+      const cards = [
+        { label: "Projected primary simultaneous demand", value: totals.projectedPrimaryDemand },
+        { label: "Projected secondary simultaneous demand", value: totals.projectedSecondaryDemand },
+        { label: "Projected required chairs", value: totals.projectedRequiredChairs },
+        { label: "Projected remaining chair gap", value: totals.remainingGap }
+      ];
+
+      els.forecastCards.innerHTML = cards.map(card => `
+        <div class="kpi">
+          <div class="label">${card.label}</div>
+          <div class="value">${formatNumber(card.value)}</div>
+        </div>
+      `).join("");
+
+      const strongestShift = [...future].sort((a, b) => b.totalRemainingGap - a.totalRemainingGap)[0];
+      const texts = [
+        `At ${Math.round(rate * 100)}% growth, projected simultaneous primary demand becomes ${formatNumber(totals.projectedPrimaryDemand)}.`,
+        `Projected simultaneous secondary demand becomes ${formatNumber(totals.projectedSecondaryDemand)}.`,
+        strongestShift ? `The largest projected chair shortage stays with ${strongestShift.schoolName} at ${formatNumber(strongestShift.totalRemainingGap)} chair(s).` : `No forecast gap is available yet.`,
+        totals.remainingGap > 0 ? `Chair shortages will still need attention under this scenario.` : `Chair gaps stay at zero under this scenario.`
+      ];
+      els.forecastInsights.innerHTML = texts.map(text => `<div class="list-item">${text}</div>`).join("");
+    }
+
+    function renderAll() {
+      const computed = getComputedSchools();
+      renderKPIs(computed);
+      renderDataTable();
+      renderReports(computed);
+      renderParameters();
+      renderForecast(computed);
+    }
+
+    function removeSchool(index) {
+      state.schools.splice(index, 1);
+      saveState("Deleted");
+      renderAll();
+    }
+    window.removeSchool = removeSchool;
+
+    function addSchool() {
+      state.schools.push({
+        region: "Region V",
+        division: "Legazpi City",
+        schoolId: "",
+        schoolName: "New School",
+        municipality: "Legazpi City",
+        proposedFundingYear: "",
+        ranking: "",
+        primaryRooms: "",
+        secondaryRooms: "",
+        primaryMorningStudents: "",
+        primaryAfternoonStudents: "",
+        secondaryMorningStudents: "",
+        secondaryAfternoonStudents: "",
+        existingPrimaryChairs: "",
+        existingSecondaryChairs: "",
+        plannedPrimaryChairs: 0,
+        plannedSecondaryChairs: 0
+      });
+      saveState("School added");
+      renderAll();
+      window.location.hash = "#data-entry";
+    }
+
+    function loadDemoInputs() {
+      state.schools = state.schools.map((school, index) => {
+        const isSecondary = school.schoolName.toUpperCase().includes("HIGH SCHOOL") || school.schoolName.toUpperCase().includes("NATIONAL HIGH SCHOOL") || school.schoolName.toUpperCase().includes(" IS");
+        const primaryRooms = isSecondary ? (index % 2) : 6 + (index % 3);
+        const secondaryRooms = isSecondary ? 8 + (index % 4) : (index % 2);
+        const primaryMorningStudents = primaryRooms ? primaryRooms * 32 + index * 2 : 0;
+        const primaryAfternoonStudents = primaryRooms ? primaryRooms * 24 + index : 0;
+        const secondaryMorningStudents = secondaryRooms ? secondaryRooms * 38 + index * 2 : 0;
+        const secondaryAfternoonStudents = secondaryRooms ? secondaryRooms * 30 + index : 0;
+        const primaryCapacity = primaryRooms * computeChairsPerRoom(getCategoryRule("Primary"));
+        const secondaryCapacity = secondaryRooms * computeChairsPerRoom(getCategoryRule("Secondary"));
+        return {
+          ...school,
+          primaryRooms,
+          secondaryRooms,
+          primaryMorningStudents,
+          primaryAfternoonStudents,
+          secondaryMorningStudents,
+          secondaryAfternoonStudents,
+          existingPrimaryChairs: Math.max(0, primaryCapacity - (15 + index * 2)),
+          existingSecondaryChairs: Math.max(0, secondaryCapacity - (20 + index * 2)),
+          plannedPrimaryChairs: (index % 4) * 8,
+          plannedSecondaryChairs: (index % 3) * 10,
+          proposedFundingYear: school.proposedFundingYear || 2027
+        };
+      });
+      saveState("Demo loaded");
+      renderAll();
+    }
+
+    function resetBrowserData() {
+      if (!window.confirm("This will remove your saved browser data and go back to the original seed list. Continue?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      loadState();
+      renderAll();
+      els.saveStatus.textContent = "Reset complete";
+    }
+
+    function exportCSV() {
+      const computed = getComputedSchools();
+      const columns = [
+        "division","schoolId","schoolName","municipality","primaryRooms","secondaryRooms",
+        "primaryMorningStudents","primaryAfternoonStudents","secondaryMorningStudents","secondaryAfternoonStudents",
+        "existingPrimaryChairs","existingSecondaryChairs","plannedPrimaryChairs","plannedSecondaryChairs",
+        "proposedFundingYear","ranking","primaryCapacity","secondaryCapacity","primarySimultaneousDemand",
+        "secondarySimultaneousDemand","requiredPrimaryChairs","requiredSecondaryChairs","primaryGap","secondaryGap",
+        "remainingPrimaryGap","remainingSecondaryGap","totalRemainingGap"
+      ];
+      const lines = [columns.join(",")];
+      computed.forEach(row => lines.push(columns.map(col => csvEscape(row[col])).join(",")));
+            const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "legazpi_school_chair_planning_data.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("input", (event) => {
+      const target = event.target;
+      if (target.dataset.index !== undefined && target.dataset.field) {
+        const index = Number(target.dataset.index);
+        const field = target.dataset.field;
+        state.schools[index][field] = target.value;
+        saveState();
+        const computed = getComputedSchools();
+        renderKPIs(computed);
+        renderReports(computed);
+        renderForecast(computed);
+        const hasActualInputs = state.schools.some(item =>
+          numberOrZero(item.primaryRooms) > 0 ||
+          numberOrZero(item.secondaryRooms) > 0 ||
+          numberOrZero(item.primaryMorningStudents) > 0 ||
+          numberOrZero(item.primaryAfternoonStudents) > 0 ||
+          numberOrZero(item.secondaryMorningStudents) > 0 ||
+          numberOrZero(item.secondaryAfternoonStudents) > 0 ||
+          numberOrZero(item.existingPrimaryChairs) > 0 ||
+          numberOrZero(item.existingSecondaryChairs) > 0
+        );
+        els.emptyNotice.style.display = hasActualInputs ? "none" : "block";
+        return;
+      }
+
+      if (target.dataset.paramIndex !== undefined && target.dataset.paramField) {
+        const index = Number(target.dataset.paramIndex);
+        const field = target.dataset.paramField;
+        state.parameters.categories[index][field] = Number(target.value);
+        saveState("Parameters updated");
+        renderAll();
+        return;
+      }
+
+      if (target.id === "growthRate") {
+        els.growthRateNumber.value = target.value;
+        renderForecast(getComputedSchools());
+      }
+      if (target.id === "growthRateNumber") {
+        let value = Number(target.value);
+        value = Math.max(0, Math.min(25, value || 0));
+        els.growthRate.value = value;
+        renderForecast(getComputedSchools());
+      }
+    });
+
+    els.searchInput.addEventListener("input", renderDataTable);
+    document.getElementById("demoBtn").addEventListener("click", loadDemoInputs);
+    document.getElementById("addBtn").addEventListener("click", addSchool);
+    document.getElementById("exportBtn").addEventListener("click", exportCSV);
+    document.getElementById("resetBtn").addEventListener("click", resetBrowserData);
+
+    loadState();
+    renderAll();
+  </script>
+</body>
+</html>
+
