@@ -6,20 +6,21 @@
   <title>Legazpi City School Chair Planning System</title>
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg: #f5f7fb;
       --panel: #ffffff;
-      --line: #d9e2ec;
-      --ink: #102a43;
-      --muted: #5c6f82;
-      --brand: #0f766e;
-      --brand-2: #0b5f59;
-      --accent: #2563eb;
+      --line: #dbe3ec;
+      --ink: #1e293b;
+      --muted: #64748b;
+      --brand: #003a8f;
+      --brand-2: #002c6b;
+      --accent: #c1121f;
+      --accent-soft: #fee2e2;
       --warn: #b45309;
       --danger: #b91c1c;
       --ok: #166534;
-      --soft: #eef6f7;
-      --chip: #e5f4f2;
-      --shadow: 0 10px 25px rgba(16, 42, 67, 0.08);
+      --soft: #f1f5f9;
+      --chip: #e0ecff;
+      --shadow: 0 10px 25px rgba(0, 58, 143, 0.08);
       --radius: 18px;
     }
     * { box-sizing: border-box; }
@@ -133,8 +134,8 @@
       box-shadow: none;
     }
     button.soft {
-      background: #eef2ff;
-      color: #3730a3;
+      background: #eff6ff;
+      color: var(--brand);
       box-shadow: none;
     }
     .kpis {
@@ -143,8 +144,9 @@
       gap: 12px;
     }
     .kpi {
-      background: linear-gradient(180deg, white 0%, #f9fcff 100%);
+      background: linear-gradient(180deg, white 0%, #f9fbff 100%);
       border: 1px solid var(--line);
+      border-top: 4px solid var(--brand);
       border-radius: 18px;
       padding: 16px;
     }
@@ -171,7 +173,7 @@
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 12px;
-      background: #fbfdff;
+      background: #fcfdff;
     }
     .bar-wrap {
       display: grid;
@@ -225,8 +227,8 @@
     thead th {
       position: sticky;
       top: 0;
-      background: #ecfdf5;
-      color: #065f46;
+      background: #e0ecff;
+      color: #002c6b;
       text-align: left;
       padding: 12px 10px;
       border-bottom: 1px solid var(--line);
@@ -237,7 +239,7 @@
       padding: 8px 10px;
       vertical-align: top;
     }
-    tbody tr:nth-child(even) { background: #fbfdff; }
+    tbody tr:nth-child(even) { background: #fcfdff; }
     tbody tr:hover { background: #f0f9ff; }
     td input, td select {
       width: 100%;
@@ -256,7 +258,7 @@
       border-radius: 12px;
       padding: 12px 14px;
       background: #eff6ff;
-      color: #1d4ed8;
+      color: var(--brand);
       border: 1px solid #bfdbfe;
       font-size: 14px;
     }
@@ -292,7 +294,7 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 16px;
-      background: #fbfdff;
+      background: #fcfdff;
     }
     .slider-row {
       display: grid;
@@ -357,12 +359,37 @@ input::placeholder, textarea::placeholder {
 
     .parameter-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; }
     .parameter-toolbar label { font-weight:700; }
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 
+.logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  background: white;
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.header-tag {
+  display: inline-block;
+  margin-top: 6px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
   </style>
 </head>
 <body>
   <div class="shell">
-    <header id="home">
+   <header id="home">
   <div class="header-top">
     <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Department_of_Education_%28Philippines%29.svg" alt="DepEd Logo" class="logo">
     
