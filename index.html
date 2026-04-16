@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -354,93 +353,55 @@ input::placeholder, textarea::placeholder {
 .kpi .label {
   color: #5c6f82 !important;
 }
+  
+
+    .parameter-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; }
+    .parameter-toolbar label { font-weight:700; }
+
   </style>
 </head>
 <body>
   <div class="shell">
     <header id="home">
       <h1>Legazpi City School Chair Planning System</h1>
-      <p>
-        A working website version of your spreadsheet project focused on chair planning. This version now computes chair demand based on <strong>room capacity</strong>, separates <strong>primary and secondary chair requirements</strong>, and adjusts for <strong>shifting schedules</strong>. It still uses <strong>TPS</strong> for data entry, <strong>MIS</strong> for reports, and <strong>DSS</strong> for forecasting.
-      </p>
+      <p>Chair planning based on room capacity, school-specific settings, and shifting schedules.</p>
       <div class="tag-row">
         <div class="tag">Scope: Legazpi City</div>
-        <div class="tag">Source base: uploaded spreadsheet</div>
-        <div class="tag">No install needed</div>
-        <div class="tag">Room-based chair planning</div>
+        <div class="tag">Primary and Secondary</div>
+        <div class="tag">School-specific parameters</div>
       </div>
       <div class="hero-actions">
-  <a class="button" href="#data-entry">Start Chair Planning</a>
-  <a class="button secondary" href="#dashboard">View Dashboard</a>
-  <a class="button secondary" href="https://script.google.com/macros/library/d/1sYVwHXsM-S-_KleyQKwb29f1pB61uhKTU3tIf9xuqRgzRNYRnARnDUGH/2" target="_blank">Open Live Database System</a>
-</div>
-
+        <a class="button" href="#data-entry">Data Entry</a>
+        <a class="button secondary" href="#dashboard">Dashboard</a>
+        <a class="button secondary" href="#parameters">Parameters</a>
+      </div>
     </header>
 
     <nav>
-      <a href="#overview">Overview</a>
       <a href="#dashboard">Dashboard</a>
       <a href="#data-entry">TPS Data Entry</a>
       <a href="#reports">MIS Reports</a>
       <a href="#forecast">DSS Forecast</a>
       <a href="#parameters">Parameters</a>
-      <a href="#help">Help</a>
     </nav>
-
-    <section id="overview" class="grid two">
-      <div class="panel">
-        <div class="section-title">
-          <div>
-            <h2 style="margin-bottom:6px;">Project flow</h2>
-            <div class="muted">This mirrors your spreadsheet logic, but now uses room-based chair planning.</div>
-          </div>
-          <span class="pill">Spreadsheet → Website</span>
-        </div>
-        <div class="grid three">
-          <div class="list-item">
-            <h3>1. TPS</h3>
-            <p class="muted">Enter room counts, shifting schedules, and available chairs for primary and secondary levels.</p>
-          </div>
-          <div class="list-item">
-            <h3>2. MIS</h3>
-            <p class="muted">Generate summaries, chair capacities, simultaneous demand, and gap reports per school.</p>
-          </div>
-          <div class="list-item">
-            <h3>3. DSS</h3>
-            <p class="muted">Test growth in simultaneous student load and see how future chair shortages change.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2 style="margin-bottom:6px;">What you still need from the office</h2>
-        <div class="muted" style="margin-bottom:10px;">These are the main fields this website expects for actual testing.</div>
-        <div class="list-card">
-          <div class="list-item"><strong>School details:</strong> School ID, School Name, Level, District or Location</div>
-          <div class="list-item"><strong>Room inventory:</strong> Number of primary rooms, number of secondary rooms</div>
-          <div class="list-item"><strong>Chair inventory:</strong> Existing primary chairs, existing secondary chairs</div>
-          <div class="list-item"><strong>Planning data:</strong> Planned primary chairs, planned secondary chairs, funding year, ranking</div>
-        </div>
-      </div>
-    </section>
 
     <section id="dashboard" class="panel" style="margin-top:18px;">
       <div class="section-title">
         <div>
           <h2 style="margin-bottom:6px;">Dashboard</h2>
-          <div class="muted">Quick view of current room-based chair requirements for the Legazpi City scope.</div>
+          <div class="muted">Current chair planning summary.</div>
         </div>
         <span class="pill" id="saveStatus">Ready</span>
       </div>
       <div class="kpis" id="kpiGrid"></div>
       <div class="grid two" style="margin-top:18px;">
         <div class="forecast-box">
-          <h3 style="margin-bottom:6px;">Top schools by remaining chair gap</h3>
-          <div class="muted">This shows where the biggest chair shortage still remains after planned allocations.</div>
+          <h3 style="margin-bottom:6px;">Priority schools for chair allocation</h3>
+          <div class="muted">Based on total remaining gap after planned allocation.</div>
           <div class="bar-wrap" id="gapBars"></div>
         </div>
         <div class="forecast-box">
-          <h3 style="margin-bottom:6px;">Quick interpretation</h3>
+          <h3 style="margin-bottom:6px;">Summary</h3>
           <div id="insightsList" class="list-card"></div>
         </div>
       </div>
@@ -450,7 +411,7 @@ input::placeholder, textarea::placeholder {
       <div class="section-title">
         <div>
           <h2 style="margin-bottom:6px;">TPS Data Entry</h2>
-          <div class="muted">Type room counts, shifting loads, and available chairs here. It auto-saves in your browser.</div>
+          <div class="muted">Enter room counts, shifting loads, and available chairs.</div>
         </div>
         <span class="pill" id="rowCounter">0 schools</span>
       </div>
@@ -464,7 +425,7 @@ input::placeholder, textarea::placeholder {
       </div>
 
       <div id="emptyNotice" class="status warn" style="display:none;">
-        No actual chair planning inputs yet. You can type real data now, or click <strong>Load Demo Inputs</strong> to preview how the website behaves.
+        No chair planning inputs yet.
       </div>
 
       <div class="table-wrap" style="margin-top:12px;">
@@ -497,7 +458,7 @@ input::placeholder, textarea::placeholder {
       <div class="section-title">
         <div>
           <h2 style="margin-bottom:6px;">MIS Reports</h2>
-          <div class="muted">Auto-computed room capacities, simultaneous demand, and chair gaps per school.</div>
+          <div class="muted">Computed room capacities, simultaneous demand, and chair gaps per school.</div>
         </div>
         <span class="pill">Auto-updating</span>
       </div>
@@ -529,7 +490,7 @@ input::placeholder, textarea::placeholder {
         <div class="section-title">
           <div>
             <h2 style="margin-bottom:6px;">DSS Forecast</h2>
-            <div class="muted">Test what happens if simultaneous student load grows next year.</div>
+            <div class="muted">Test changes in simultaneous student load.</div>
           </div>
           <span class="pill">What-if analysis</span>
         </div>
@@ -540,15 +501,14 @@ input::placeholder, textarea::placeholder {
             <input id="growthRate" type="range" min="0" max="25" step="1" value="10">
             <input id="growthRateNumber" type="number" min="0" max="25" step="1" value="10">
           </div>
-          <div class="note">Example: 10 means the morning and afternoon student loads are projected to increase by 10%.</div>
+          <div class="note">Example: 10 means the simultaneous student load increases by 10%.</div>
         </div>
 
         <div class="mini-grid" style="margin-top:12px;" id="forecastCards"></div>
       </div>
 
       <div class="panel">
-        <h2 style="margin-bottom:6px;">Forecast interpretation</h2>
-        <div class="muted" style="margin-bottom:12px;">This helps you explain the decision-support part of your project.</div>
+        <h2 style="margin-bottom:6px;">Forecast summary</h2>
         <div id="forecastInsights" class="list-card"></div>
       </div>
     </section>
@@ -556,10 +516,16 @@ input::placeholder, textarea::placeholder {
     <section id="parameters" class="panel" style="margin-top:18px;">
       <div class="section-title">
         <div>
-          <h2 style="margin-bottom:6px;">Planning Parameters</h2>
-          <div class="muted">Edit the standard room dimensions, chair dimensions, and layout efficiency here. The whole site updates.</div>
+          <h2 style="margin-bottom:6px;">Parameters</h2>
+          <div class="muted" id="paramScopeLabel">Edit default settings or assign custom settings to one school.</div>
         </div>
         <span class="pill">Editable rules</span>
+      </div>
+
+      <div class="parameter-toolbar">
+        <label for="parameterSchoolSelect">Apply to:</label>
+        <select id="parameterSchoolSelect"></select>
+        <button id="resetSchoolParamsBtn" class="secondary" type="button">Reset Selected to Default</button>
       </div>
 
       <div class="table-wrap">
@@ -572,55 +538,21 @@ input::placeholder, textarea::placeholder {
               <th>Chair Length (m)</th>
               <th>Chair Width (m)</th>
               <th>Layout Efficiency</th>
-              <th>Chairs / Standard Room</th>
+              <th>Chairs per Room</th>
             </tr>
           </thead>
           <tbody id="paramBody"></tbody>
         </table>
       </div>
-
-      <div class="mini-grid" style="margin-top:16px;">
-        <div class="forecast-box">
-          <label><strong>Primary label</strong></label>
-          <div class="note">Used for smaller chair specification.</div>
-        </div>
-        <div class="forecast-box">
-          <label><strong>Secondary label</strong></label>
-          <div class="note">Used for larger chair specification.</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="help" class="grid two" style="margin-top:18px;">
-      <div class="panel">
-        <h2 style="margin-bottom:6px;">How to use this website</h2>
-        <div class="list-card">
-          <div class="list-item">Open the file in your browser.</div>
-          <div class="list-item">Go to <strong>TPS Data Entry</strong> and type room counts, shifts, and current chair inventory.</div>
-          <div class="list-item">Check <strong>MIS Reports</strong> for room capacity, simultaneous demand, and chair shortages.</div>
-          <div class="list-item">Use <strong>DSS Forecast</strong> to show future chair needs during your presentation.</div>
-          <div class="list-item">Click <strong>Export CSV</strong> if you want a copy of your browser data.</div>
-        </div>
-      </div>
-      <div class="panel">
-        <h2 style="margin-bottom:6px;">Important notes</h2>
-        <div class="list-card">
-          <div class="list-item">The site starts with Legazpi City schools from your uploaded workbook.</div>
-          <div class="list-item">Most actual planning fields are blank on purpose, because those are the real values you still need to request.</div>
-          <div class="list-item">The <strong>Load Demo Inputs</strong> button generates sample values for testing only.</div>
-          <div class="list-item">All changes are stored locally in your own browser until you reset them.</div>
-        </div>
-      </div>
     </section>
 
     <div class="footer">
-      Built from your spreadsheet structure for a school chair planning project demo.
+      Chair planning prototype.
     </div>
   </div>
 
-  
   <script>
-    const STORAGE_KEY = "legazpi-chair-planning-site-v2";
+    const STORAGE_KEY = "legazpi-chair-planning-site-v3";
     const rawSeedSchools = [
       {"region":"Region V","division":"Legazpi City","schoolId":"302259","schoolName":"Homapon High School","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":2},
       {"region":"Region V","division":"Legazpi City","schoolId":"502624","schoolName":"San Francisco IS","municipality":"LEGAZPI CITY (Capital)","proposedFundingYear":2026,"ranking":3},
@@ -648,6 +580,10 @@ input::placeholder, textarea::placeholder {
       ]
     };
 
+    function cloneCategories(categories) {
+      return categories.map(item => ({ ...item }));
+    }
+
     function createSeedSchool(row) {
       return {
         ...row,
@@ -660,13 +596,15 @@ input::placeholder, textarea::placeholder {
         existingPrimaryChairs: "",
         existingSecondaryChairs: "",
         plannedPrimaryChairs: 0,
-        plannedSecondaryChairs: 0
+        plannedSecondaryChairs: 0,
+        customParameters: null
       };
     }
 
     const state = {
       schools: [],
-      parameters: structuredClone(defaultParameters)
+      parameters: structuredClone(defaultParameters),
+      parameterTarget: "__default__"
     };
 
     const els = {
@@ -683,16 +621,33 @@ input::placeholder, textarea::placeholder {
       saveStatus: document.getElementById("saveStatus"),
       emptyNotice: document.getElementById("emptyNotice"),
       growthRate: document.getElementById("growthRate"),
-      growthRateNumber: document.getElementById("growthRateNumber")
+      growthRateNumber: document.getElementById("growthRateNumber"),
+      parameterSchoolSelect: document.getElementById("parameterSchoolSelect"),
+      resetSchoolParamsBtn: document.getElementById("resetSchoolParamsBtn"),
+      paramScopeLabel: document.getElementById("paramScopeLabel")
     };
 
+    function ensureSchoolShape(school) {
+      return {
+        ...createSeedSchool({}),
+        ...school,
+        customParameters: school.customParameters && school.customParameters.categories
+          ? { categories: cloneCategories(school.customParameters.categories) }
+          : null
+      };
+    }
+
     function loadState() {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("legazpi-chair-planning-site-v2") || localStorage.getItem("legazpi-furniture-planning-site-v1");
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          state.schools = parsed.schools || rawSeedSchools.map(createSeedSchool);
-          state.parameters = parsed.parameters || structuredClone(defaultParameters);
+          state.schools = (parsed.schools || rawSeedSchools.map(createSeedSchool)).map(ensureSchoolShape);
+          if (parsed.parameters && parsed.parameters.categories) {
+            state.parameters = { categories: cloneCategories(parsed.parameters.categories) };
+          } else {
+            state.parameters = structuredClone(defaultParameters);
+          }
           return;
         } catch (error) {
           console.warn("Could not parse saved state. Loading seed data.", error);
@@ -728,14 +683,30 @@ input::placeholder, textarea::placeholder {
 
     function csvEscape(value) {
       const text = String(value ?? "");
-      if (text.includes(",") || text.includes('"') || text.includes("\n")) {
+      if (text.includes(",") || text.includes("\"") || text.includes("\n")) {
         return `"${text.replace(/"/g, '""')}"`;
       }
       return text;
     }
 
-    function getCategoryRule(category) {
-      return state.parameters.categories.find(item => item.category === category) || state.parameters.categories[0];
+    function getSchoolKey(school) {
+      return school.schoolId ? `id:${school.schoolId}` : `name:${school.schoolName}`;
+    }
+
+    function getSchoolByKey(key) {
+      return state.schools.find(school => getSchoolKey(school) === key) || null;
+    }
+
+    function getRuleSetForSchool(school) {
+      if (school && school.customParameters && school.customParameters.categories) {
+        return school.customParameters.categories;
+      }
+      return state.parameters.categories;
+    }
+
+    function getCategoryRule(category, school = null) {
+      const rules = getRuleSetForSchool(school);
+      return rules.find(item => item.category === category) || rules[0];
     }
 
     function computeChairsPerRoom(rule) {
@@ -746,8 +717,8 @@ input::placeholder, textarea::placeholder {
     }
 
     function computeSchool(school) {
-      const primaryRule = getCategoryRule("Primary");
-      const secondaryRule = getCategoryRule("Secondary");
+      const primaryRule = getCategoryRule("Primary", school);
+      const secondaryRule = getCategoryRule("Secondary", school);
       const primaryChairsPerRoom = computeChairsPerRoom(primaryRule);
       const secondaryChairsPerRoom = computeChairsPerRoom(secondaryRule);
 
@@ -766,15 +737,15 @@ input::placeholder, textarea::placeholder {
       const secondaryCapacity = secondaryRooms * secondaryChairsPerRoom;
       const primarySimultaneousDemand = Math.max(primaryMorningStudents, primaryAfternoonStudents);
       const secondarySimultaneousDemand = Math.max(secondaryMorningStudents, secondaryAfternoonStudents);
-      const requiredPrimaryChairs = Math.min(primaryCapacity, primarySimultaneousDemand || primaryCapacity);
-      const requiredSecondaryChairs = Math.min(secondaryCapacity, secondarySimultaneousDemand || secondaryCapacity);
+      const requiredPrimaryChairs = Math.min(primaryCapacity, primarySimultaneousDemand);
+      const requiredSecondaryChairs = Math.min(secondaryCapacity, secondarySimultaneousDemand);
       const primaryGap = Math.max(0, requiredPrimaryChairs - existingPrimaryChairs);
       const secondaryGap = Math.max(0, requiredSecondaryChairs - existingSecondaryChairs);
       const remainingPrimaryGap = Math.max(0, primaryGap - plannedPrimaryChairs);
       const remainingSecondaryGap = Math.max(0, secondaryGap - plannedSecondaryChairs);
-      const totalRemainingGap = remainingPrimaryGap + remainingSecondaryGap;
       const totalCapacity = primaryCapacity + secondaryCapacity;
       const totalRequiredChairs = requiredPrimaryChairs + requiredSecondaryChairs;
+      const totalRemainingGap = remainingPrimaryGap + remainingSecondaryGap;
 
       return {
         ...school,
@@ -790,9 +761,9 @@ input::placeholder, textarea::placeholder {
         secondaryGap,
         remainingPrimaryGap,
         remainingSecondaryGap,
-        totalRemainingGap,
         totalCapacity,
-        totalRequiredChairs
+        totalRequiredChairs,
+        totalRemainingGap
       };
     }
 
@@ -800,21 +771,29 @@ input::placeholder, textarea::placeholder {
       return state.schools.map(computeSchool);
     }
 
+    function populateParameterSelector() {
+      const current = state.parameterTarget;
+      els.parameterSchoolSelect.innerHTML = `
+        <option value="__default__">Default settings for all schools</option>
+        ${state.schools.map(school => `<option value="${getSchoolKey(school)}">${escapeHtml(school.schoolName || 'Unnamed School')}</option>`).join("") }
+      `;
+      els.parameterSchoolSelect.value = current;
+    }
+
     function renderKPIs(computed) {
       const totals = computed.reduce((acc, row) => {
         acc.schools += 1;
         acc.totalCapacity += row.totalCapacity;
         acc.totalRequiredChairs += row.totalRequiredChairs;
-        acc.remainingPrimaryGap += row.remainingPrimaryGap;
-        acc.remainingSecondaryGap += row.remainingSecondaryGap;
+        acc.totalRemainingGap += row.totalRemainingGap;
         return acc;
-      }, { schools: 0, totalCapacity: 0, totalRequiredChairs: 0, remainingPrimaryGap: 0, remainingSecondaryGap: 0 });
+      }, { schools: 0, totalCapacity: 0, totalRequiredChairs: 0, totalRemainingGap: 0 });
 
       const cards = [
-        { label: "Schools in scope", value: totals.schools, sub: "Legazpi City seed list" },
-        { label: "Total chair capacity", value: totals.totalCapacity, sub: "Based on room dimensions and chair size" },
-        { label: "Total required chairs", value: totals.totalRequiredChairs, sub: "Adjusted for shifting schedules" },
-        { label: "Remaining chair gap", value: totals.remainingPrimaryGap + totals.remainingSecondaryGap, sub: "After planned allocation" }
+        { label: "Schools in scope", value: totals.schools, sub: "Current records" },
+        { label: "Total chair capacity", value: totals.totalCapacity, sub: "From rooms and parameters" },
+        { label: "Total required chairs", value: totals.totalRequiredChairs, sub: "Adjusted for shifting" },
+        { label: "Remaining chair gap", value: totals.totalRemainingGap, sub: "After planned allocation" }
       ];
 
       els.kpiGrid.innerHTML = cards.map(card => `
@@ -825,30 +804,38 @@ input::placeholder, textarea::placeholder {
         </div>
       `).join("");
 
-      const topGaps = [...computed].sort((a, b) => b.totalRemainingGap - a.totalRemainingGap).slice(0, 5);
-      const maxGap = Math.max(1, ...topGaps.map(item => numberOrZero(item.totalRemainingGap)));
-      els.gapBars.innerHTML = topGaps.map(item => `
+      const prioritySchools = [...computed]
+        .sort((a, b) => b.totalRemainingGap - a.totalRemainingGap || numberOrZero(a.ranking) - numberOrZero(b.ranking))
+        .slice(0, 5);
+
+      const maxGap = Math.max(1, ...prioritySchools.map(item => numberOrZero(item.totalRemainingGap)));
+      els.gapBars.innerHTML = prioritySchools.map(item => `
         <div class="bar-row">
-          <div>${escapeHtml(item.schoolName)}</div>
+          <div>${escapeHtml(item.schoolName)}<div class="readonly">Rank: ${item.ranking || '-'}</div></div>
           <div class="bar-track"><div class="bar-fill" style="width:${(numberOrZero(item.totalRemainingGap) / maxGap) * 100}%"></div></div>
           <div><strong>${formatNumber(item.totalRemainingGap)}</strong></div>
         </div>
-      `).join("") || '<div class="muted">No chair gap data yet.</div>';
+      `).join("") || '<div class="muted">No priority data yet.</div>';
 
-      const schoolsWithInputs = computed.filter(item => item.primaryRooms || item.secondaryRooms || item.primarySimultaneousDemand || item.secondarySimultaneousDemand).length;
-      const highestGap = topGaps[0];
+      const schoolsWithInputs = computed.filter(item =>
+        numberOrZero(item.primaryRooms) > 0 ||
+        numberOrZero(item.secondaryRooms) > 0 ||
+        numberOrZero(item.existingPrimaryChairs) > 0 ||
+        numberOrZero(item.existingSecondaryChairs) > 0
+      ).length;
+      const topPriority = prioritySchools[0];
       const insightItems = [
-        `${schoolsWithInputs} school(s) currently have actual chair planning inputs entered.`,
-        `Current total room-based chair capacity is ${formatNumber(totals.totalCapacity)}.`,
-        highestGap ? `Highest remaining total chair gap: ${highestGap.schoolName} with ${formatNumber(highestGap.totalRemainingGap)} chair(s).` : `No chair gap data yet.`,
-        totals.remainingPrimaryGap + totals.remainingSecondaryGap > 0 ? `There is still an unresolved chair shortage based on the current entries.` : `No remaining chair shortage is showing right now.`
+        `${schoolsWithInputs} school(s) currently have planning inputs.`,
+        `Current total required chairs: ${formatNumber(totals.totalRequiredChairs)}.`,
+        topPriority ? `Highest current priority: ${topPriority.schoolName} with ${formatNumber(topPriority.totalRemainingGap)} remaining chair(s).` : `No priority school identified yet.`,
+        totals.totalRemainingGap > 0 ? `Additional chair allocation is still needed.` : `No remaining chair gap is showing right now.`
       ];
       els.insightsList.innerHTML = insightItems.map(text => `<div class="list-item">${text}</div>`).join("");
     }
 
     function renderDataTable() {
       const query = els.searchInput.value.trim().toLowerCase();
-      const rows = state.schools.filter(row => !query || row.schoolName.toLowerCase().includes(query));
+      const rows = state.schools.filter(row => !query || (row.schoolName || '').toLowerCase().includes(query));
       els.rowCounter.textContent = `${rows.length} school(s) shown`;
 
       els.dataBody.innerHTML = rows.map((school) => {
@@ -870,8 +857,8 @@ input::placeholder, textarea::placeholder {
             <td><input type="number" min="0" data-field="existingSecondaryChairs" data-index="${originalIndex}" value="${school.existingSecondaryChairs}"></td>
             <td><input type="number" min="0" data-field="plannedPrimaryChairs" data-index="${originalIndex}" value="${school.plannedPrimaryChairs}"></td>
             <td><input type="number" min="0" data-field="plannedSecondaryChairs" data-index="${originalIndex}" value="${school.plannedSecondaryChairs}"></td>
-            <td><input type="number" min="0" data-field="proposedFundingYear" data-index="${originalIndex}" value="${school.proposedFundingYear}"></td>
-            <td><input type="number" min="0" data-field="ranking" data-index="${originalIndex}" value="${school.ranking}"></td>
+            <td><input type="number" min="0" data-field="proposedFundingYear" data-index="${originalIndex}" value="${school.proposedFundingYear || ""}"></td>
+            <td><input type="number" min="0" data-field="ranking" data-index="${originalIndex}" value="${school.ranking || ""}"></td>
             <td><button class="secondary" type="button" onclick="removeSchool(${originalIndex})">Delete</button></td>
           </tr>
         `;
@@ -910,7 +897,15 @@ input::placeholder, textarea::placeholder {
     }
 
     function renderParameters() {
-      els.paramBody.innerHTML = state.parameters.categories.map((row, index) => {
+      populateParameterSelector();
+      const selectedSchool = state.parameterTarget === "__default__" ? null : getSchoolByKey(state.parameterTarget);
+      const rules = getRuleSetForSchool(selectedSchool);
+      els.paramScopeLabel.textContent = selectedSchool
+        ? `Editing custom parameters for ${selectedSchool.schoolName}.`
+        : "Editing default settings used by schools without custom parameters.";
+      els.resetSchoolParamsBtn.style.display = selectedSchool ? "inline-flex" : "none";
+
+      els.paramBody.innerHTML = rules.map((row, index) => {
         const chairsPerRoom = computeChairsPerRoom(row);
         return `
           <tr>
@@ -933,14 +928,13 @@ input::placeholder, textarea::placeholder {
         const primaryAfternoonStudents = Math.ceil(numberOrZero(row.primaryAfternoonStudents) * (1 + rate));
         const secondaryMorningStudents = Math.ceil(numberOrZero(row.secondaryMorningStudents) * (1 + rate));
         const secondaryAfternoonStudents = Math.ceil(numberOrZero(row.secondaryAfternoonStudents) * (1 + rate));
-        const projectedRow = computeSchool({
+        return computeSchool({
           ...row,
           primaryMorningStudents,
           primaryAfternoonStudents,
           secondaryMorningStudents,
           secondaryAfternoonStudents
         });
-        return { ...projectedRow };
       });
 
       const totals = future.reduce((acc, row) => {
@@ -965,12 +959,12 @@ input::placeholder, textarea::placeholder {
         </div>
       `).join("");
 
-      const strongestShift = [...future].sort((a, b) => b.totalRemainingGap - a.totalRemainingGap)[0];
+      const topProjected = [...future].sort((a, b) => b.totalRemainingGap - a.totalRemainingGap)[0];
       const texts = [
-        `At ${Math.round(rate * 100)}% growth, projected simultaneous primary demand becomes ${formatNumber(totals.projectedPrimaryDemand)}.`,
-        `Projected simultaneous secondary demand becomes ${formatNumber(totals.projectedSecondaryDemand)}.`,
-        strongestShift ? `The largest projected chair shortage stays with ${strongestShift.schoolName} at ${formatNumber(strongestShift.totalRemainingGap)} chair(s).` : `No forecast gap is available yet.`,
-        totals.remainingGap > 0 ? `Chair shortages will still need attention under this scenario.` : `Chair gaps stay at zero under this scenario.`
+        `At ${Math.round(rate * 100)}% growth, projected primary simultaneous demand becomes ${formatNumber(totals.projectedPrimaryDemand)}.`,
+        `Projected secondary simultaneous demand becomes ${formatNumber(totals.projectedSecondaryDemand)}.`,
+        topProjected ? `Highest projected priority: ${topProjected.schoolName} with ${formatNumber(topProjected.totalRemainingGap)} remaining chair(s).` : `No forecast gap is available yet.`,
+        totals.remainingGap > 0 ? `Chair shortages still need attention under this scenario.` : `No remaining chair gap is showing under this scenario.`
       ];
       els.forecastInsights.innerHTML = texts.map(text => `<div class="list-item">${text}</div>`).join("");
     }
@@ -986,6 +980,9 @@ input::placeholder, textarea::placeholder {
 
     function removeSchool(index) {
       state.schools.splice(index, 1);
+      if (state.parameterTarget !== "__default__" && !getSchoolByKey(state.parameterTarget)) {
+        state.parameterTarget = "__default__";
+      }
       saveState("Deleted");
       renderAll();
     }
@@ -1009,7 +1006,8 @@ input::placeholder, textarea::placeholder {
         existingPrimaryChairs: "",
         existingSecondaryChairs: "",
         plannedPrimaryChairs: 0,
-        plannedSecondaryChairs: 0
+        plannedSecondaryChairs: 0,
+        customParameters: null
       });
       saveState("School added");
       renderAll();
@@ -1025,8 +1023,8 @@ input::placeholder, textarea::placeholder {
         const primaryAfternoonStudents = primaryRooms ? primaryRooms * 24 + index : 0;
         const secondaryMorningStudents = secondaryRooms ? secondaryRooms * 38 + index * 2 : 0;
         const secondaryAfternoonStudents = secondaryRooms ? secondaryRooms * 30 + index : 0;
-        const primaryCapacity = primaryRooms * computeChairsPerRoom(getCategoryRule("Primary"));
-        const secondaryCapacity = secondaryRooms * computeChairsPerRoom(getCategoryRule("Secondary"));
+        const primaryCapacity = primaryRooms * computeChairsPerRoom(getCategoryRule("Primary", school));
+        const secondaryCapacity = secondaryRooms * computeChairsPerRoom(getCategoryRule("Secondary", school));
         return {
           ...school,
           primaryRooms,
@@ -1049,7 +1047,10 @@ input::placeholder, textarea::placeholder {
     function resetBrowserData() {
       if (!window.confirm("This will remove your saved browser data and go back to the original seed list. Continue?")) return;
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("legazpi-chair-planning-site-v2");
+      localStorage.removeItem("legazpi-furniture-planning-site-v1");
       loadState();
+      state.parameterTarget = "__default__";
       renderAll();
       els.saveStatus.textContent = "Reset complete";
     }
@@ -1060,13 +1061,13 @@ input::placeholder, textarea::placeholder {
         "division","schoolId","schoolName","municipality","primaryRooms","secondaryRooms",
         "primaryMorningStudents","primaryAfternoonStudents","secondaryMorningStudents","secondaryAfternoonStudents",
         "existingPrimaryChairs","existingSecondaryChairs","plannedPrimaryChairs","plannedSecondaryChairs",
-        "proposedFundingYear","ranking","primaryCapacity","secondaryCapacity","primarySimultaneousDemand",
-        "secondarySimultaneousDemand","requiredPrimaryChairs","requiredSecondaryChairs","primaryGap","secondaryGap",
-        "remainingPrimaryGap","remainingSecondaryGap","totalRemainingGap"
+        "proposedFundingYear","ranking","primaryChairsPerRoom","secondaryChairsPerRoom","primaryCapacity","secondaryCapacity",
+        "primarySimultaneousDemand","secondarySimultaneousDemand","requiredPrimaryChairs","requiredSecondaryChairs",
+        "primaryGap","secondaryGap","remainingPrimaryGap","remainingSecondaryGap","totalRemainingGap"
       ];
       const lines = [columns.join(",")];
       computed.forEach(row => lines.push(columns.map(col => csvEscape(row[col])).join(",")));
-            const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -1097,13 +1098,26 @@ input::placeholder, textarea::placeholder {
           numberOrZero(item.existingSecondaryChairs) > 0
         );
         els.emptyNotice.style.display = hasActualInputs ? "none" : "block";
+        renderParameters();
         return;
       }
 
       if (target.dataset.paramIndex !== undefined && target.dataset.paramField) {
         const index = Number(target.dataset.paramIndex);
         const field = target.dataset.paramField;
-        state.parameters.categories[index][field] = Number(target.value);
+        const value = Number(target.value);
+
+        if (state.parameterTarget === "__default__") {
+          state.parameters.categories[index][field] = value;
+        } else {
+          const school = getSchoolByKey(state.parameterTarget);
+          if (school) {
+            if (!school.customParameters) {
+              school.customParameters = { categories: cloneCategories(state.parameters.categories) };
+            }
+            school.customParameters.categories[index][field] = value;
+          }
+        }
         saveState("Parameters updated");
         renderAll();
         return;
@@ -1126,10 +1140,20 @@ input::placeholder, textarea::placeholder {
     document.getElementById("addBtn").addEventListener("click", addSchool);
     document.getElementById("exportBtn").addEventListener("click", exportCSV);
     document.getElementById("resetBtn").addEventListener("click", resetBrowserData);
+    els.parameterSchoolSelect.addEventListener("change", (event) => {
+      state.parameterTarget = event.target.value;
+      renderParameters();
+    });
+    els.resetSchoolParamsBtn.addEventListener("click", () => {
+      const school = getSchoolByKey(state.parameterTarget);
+      if (!school) return;
+      school.customParameters = null;
+      saveState("School parameters reset");
+      renderAll();
+    });
 
     loadState();
     renderAll();
   </script>
 </body>
 </html>
-
