@@ -359,50 +359,25 @@ input::placeholder, textarea::placeholder {
 
     .parameter-toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; }
     .parameter-toolbar label { font-weight:700; }
-.header-top {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
 
-.logo {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  background: white;
-  border-radius: 12px;
-  padding: 6px;
-}
-
-.header-tag {
-  display: inline-block;
-  margin-top: 6px;
-  background: rgba(255,255,255,0.18);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #ffffff;
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
   </style>
 </head>
 <body>
   <div class="shell">
-   <header id="home">
-  <div class="header-top">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Department_of_Education_%28Philippines%29.svg" alt="DepEd Logo" class="logo">
-    
-    <div>
-      <h1>Legazpi City School Furniture Planning System</h1>
-      <div class="header-tag">Department of Education – Planning System Prototype</div>
-    </div>
-  </div>
-
-  <p>
-    School furniture planning system for managing classroom chair requirements based on room capacity, shifting schedules, and school-specific parameters.
-  </p>
-</header>
+    <header id="home">
+      <h1>Legazpi City School Chair Planning System</h1>
+      <p>Chair planning based on room capacity, school-specific settings, and shifting schedules.</p>
+      <div class="tag-row">
+        <div class="tag">Scope: Legazpi City</div>
+        <div class="tag">Primary and Secondary</div>
+        <div class="tag">School-specific parameters</div>
+      </div>
+      <div class="hero-actions">
+        <a class="button" href="#data-entry">Data Entry</a>
+        <a class="button secondary" href="#dashboard">Dashboard</a>
+        <a class="button secondary" href="#parameters">Parameters</a>
+      </div>
+    </header>
 
     <nav>
       <a href="#dashboard">Dashboard</a>
