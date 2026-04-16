@@ -733,12 +733,12 @@ function loadState() {
     els.deleteSelectedBtn.addEventListener('click', removeSelectedSchool);
 
     window.addEventListener('hashchange', () => {
-      showPage(resolvePageFromHash());
+      showPage(getPageFromHash());
     });
 
     loadState();
     renderAll();
-    showPage(resolvePageFromHash());
+    showPage(getPageFromHash());
   </script>
 </body>
 </html>
